@@ -1,11 +1,14 @@
 from RSA import *
 from variables import *
+import time
 
 
 if __name__ == "__main__":
     running()
 
     command = input('Do you want to chande standart bit_length = 1024? [Y/N]:  ')
+    print("Generating public/private keypair...")
+    
     while command not in 'YN':
         print('Invalid input')
         command = input("Do you want to chande standart bit_length = 1024? [Y/N]:  ")
@@ -28,3 +31,5 @@ if __name__ == "__main__":
 
     decrypted_message = decrypt(private, encrypted_message)
     print("Decrypted message:", decrypted_message)
+
+    time.sleep(5000)

@@ -49,4 +49,3 @@ def decrypt(private_key, ciphertext):
 
 def running():
     print("RSA is running...")
-    print("Generating public/private keypair...")
