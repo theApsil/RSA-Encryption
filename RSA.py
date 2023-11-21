@@ -73,3 +73,9 @@ def gen_keypair(p: int, q: int, keysize: int):
     #private key (d,n)
 
     return ((e, n), (d, n))
+
+
+def encrypt(plaintext, package):
+    e, n = package
+    msg_ciphertext = [pow(ord(c), e, n) for c in plaintext]
+    return msg_ciphertext
