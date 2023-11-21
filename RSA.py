@@ -79,3 +79,12 @@ def encrypt(plaintext, package):
     e, n = package
     msg_ciphertext = [pow(ord(c), e, n) for c in plaintext]
     return msg_ciphertext
+
+
+def decrypt(msg_ciphertext, package):
+    d, n = package
+    plaintext = [chr(pow(c, d, n)) for c in msg_ciphertext]
+
+    return ''.join(plaintext)
+
+
