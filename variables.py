@@ -1,6 +1,7 @@
 import random
 from random import randint as rand
- 
+
+
 bit_length = 1024
 
 
@@ -9,6 +10,7 @@ def gen_prime(bit_length=1024):
         num = random.getrandbits(bit_length)
         if is_prime(num):
             return num
+
 
 def is_prime(n, k=5):
     if n == 2 or n == 3:
