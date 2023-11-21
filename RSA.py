@@ -16,13 +16,6 @@ def gcd(a: int, b: int) -> int:
     return a if b == 0 else m.gcd(a, a % b)
 
 
-# def generate_prime(bit_length):
-#     candidate = random.getrandbits(bit_length)
-#     while not isPrime(candidate):
-#         candidate = random.getrandbits(bit_length)
-#     return candidate
-
-
 def generate_keypair(p, q, bit_length):
 
     p = gen_prime(bit_length)
