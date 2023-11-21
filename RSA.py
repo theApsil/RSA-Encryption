@@ -88,3 +88,6 @@ def decrypt(msg_ciphertext, package):
     return ''.join(plaintext)
 
 
+def running():
+    print("RSA is running...")
+    print("Generating public/private keypair...")
