@@ -1,4 +1,4 @@
-from math import sqrt
+import math as m
 from variables import *
 
 
@@ -8,7 +8,7 @@ def isPrime(n: int) -> bool:
     elif n == 2:
         return True
     else:
-        for i in range(2, int(sqrt(n)) + 1):
+        for i in range(2, int(m.sqrt(n)) + 1):
             if n % i == 0:
                 return False
     
@@ -16,75 +16,49 @@ def isPrime(n: int) -> bool:
 
 
 def inverse(a: int, m: int) -> int:
-    for item in range(1, m):
-        if a * item % m == 1:
-            return item
-    
-    return -1
+    m0, x0, x1 = m, 0, 1
+    while a > 1:
+        q = a // m
+        m, a = a % m, m
+        x0, x1 = x1 - q * x0, x0
+    return x1 + m0 if x1 < 0 else x1
 
 
 def gcd(a: int, b: int) -> int:
-    return a if b == 0 else gcd(a, a % b)
+    return a if b == 0 else m.gcd(a, a % b)
 
 
-def gen_keypair(p: int, q: int, keysize: int):
-    _min = 1 << (keysize - 1)
-    _max = (1 << keysize) - 1
-    primes = [2]
+def generate_prime(bit_length):
+    candidate = random.getrandbits(bit_length)
+    while not isPrime(candidate):
+        candidate = random.getrandbits(bit_length)
+    return candidate
 
-    start = 1 << (keysize // 2 - 1)
-    stop = 1 << (keysize // 2 + 1)
 
-    if start >= stop:
-        return []
-    
-    for i in range(3, stop + 1, 2):
-        for nubmer in primes:
-            if i % nubmer == 0:
-                break
-        else:
-            primes.append(i)
-
-    while primes:
-        p = random.choice(primes)
-        primes.remove(p)
-        q_values = [q for q in primes if _min <= p * q <= _max]
-        if q_values:
-            q = random.choice(q_values)
-            break
-    print(p, q)
+def generate_keypair(p, q):
     n = p * q
-    phi = (p - 1) * (q - 1)
+    phi = (p-1) * (q-1)
 
-    n = p * q
-    phi = (p - 1) * (q - 1)
+    # Выбираем открытый ключ e, такой что 1 < e < phi и e взаимно прост с phi
+    e = random.randrange(2, phi)
+    while gcd(e, phi) != 1:
+        e = random.randrange(2, phi)
 
-    e = random.randrange(1, phi)
-    g = gcd(e, phi)
-
-    while True:
-        e = random.randrange(1, phi)
-        g = gcd(e, phi)
-        d = inverse(e, phi)
-        if g == 1 and e != d:
-            break
-
-    #public key (e,n)
-    #private key (d,n)
+    # Вычисляем закрытый ключ d, такой что d * e ≡ 1 (mod phi)
+    d = inverse(e, phi)
 
     return ((e, n), (d, n))
 
+def encrypt(public_key, plaintext):
+    e, n = public_key
+    ciphertext = [pow(ord(char), e, n) for char in plaintext]
+    return ciphertext
 
-def encrypt(plaintext, package):
-    e, n = package
-    msg_ciphertext = [pow(ord(c), e, n) for c in plaintext]
-    return msg_ciphertext
 
 
-def decrypt(msg_ciphertext, package):
-    d, n = package
-    plaintext = [chr(pow(c, d, n)) for c in msg_ciphertext]
-
+def decrypt(private_key, ciphertext):
+    d, n = private_key
+    plaintext = [chr(pow(char, d, n)) for char in ciphertext]
     return ''.join(plaintext)
 
 
